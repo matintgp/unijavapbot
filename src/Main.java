@@ -16,7 +16,7 @@ import org.json.JSONObject;
  */
 public class Main {
     // توکن ربات تلگرام - از BotFather دریافت می‌شود
-    static String botToken = "8529385580:AAFoIEqgNJvHgCNAvU-gxPSdU79DxZXTxwg";
+    static String botToken = "ur_bot_token";
     
     // ذخیره chat_id های شناخته شده برای ارسال اعلان آنلاین شدن
     static Set<Long> knownChatIds = new HashSet<>();
