@@ -16,7 +16,7 @@ import org.json.JSONObject;
  */
 public class Main {
     // توکن ربات تلگرام - از BotFather دریافت می‌شود
-    static String botToken = "ur_bot_token";
+    static String botToken = "8529385580:AAFoIEqgNJvHgCNAvU-gxPSdU79DxZXTxwg";
     
     // ذخیره chat_id های شناخته شده برای ارسال اعلان آنلاین شدن
     static Set<Long> knownChatIds = new HashSet<>();
@@ -174,9 +174,22 @@ public class Main {
             ExcelReader.upsertUserRow(user, "user2.xlsx");
             
         } else if (text.equals("/send")) {
-            // ارسال به کاربران از اکسل
-            sendToExcelUsers();
-            MessagePhotoSender.sendMessage(botToken, chatId, "✅ ارسال به کاربران لیست انجام شد.");
+            // گرفتن اسم کاربر
+            String userName = "";
+            if (chat.has("first_name")) {
+                userName = chat.getString("first_name");
+            } else if (chat.has("username")) {
+                userName = chat.getString("username");
+            }
+            
+            // ارسال پیام شروع
+            String startMsg = "کاربر عزیز " + userName + "، عکس‌ها درحال ارسال هستند... 📤";
+            MessagePhotoSender.sendMessage(botToken, chatId, startMsg);
+            
+            // ارسال همه عکس‌های پوشه fol به این کاربر
+            MessagePhotoSender.sendAllPhotos(botToken, chatId, "fol");
+            
+            MessagePhotoSender.sendMessage(botToken, chatId, "✅ ارسال عکس‌ها تمام شد!");
             
         } else if (text.equals("/status")) {
             String status = "📊 وضعیت ربات:\n" +

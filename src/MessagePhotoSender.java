@@ -14,6 +14,44 @@ import java.util.Comparator;
 public class MessagePhotoSender {
 
     /**
+     * ارسال همه عکس‌های یک پوشه به کاربر
+     * @param botToken توکن ربات
+     * @param chatId شناسه چت کاربر
+     * @param folderPath مسیر پوشه عکس‌ها
+     */
+    public static void sendAllPhotos(String botToken, Long chatId, String folderPath) {
+        try {
+            File folder = new File(folderPath);
+            File[] files = folder.listFiles((dir, name) -> name.endsWith(".jpg") || name.endsWith(".png"));
+
+            if (files == null || files.length == 0) {
+                System.out.println("هیچ عکسی در فولدر وجود ندارد!");
+                return;
+            }
+
+            // مرتب‌سازی فایل‌ها بر اساس عدد داخل نام فایل
+            Arrays.sort(files, Comparator.comparingInt(f -> {
+                String name = f.getName()
+                        .replace(".jpg", "")
+                        .replace(".png", "")
+                        .replaceAll("[^0-9]", "");
+                if (name.isEmpty()) return 0;
+                return Integer.parseInt(name.trim());
+            }));
+
+            // ارسال همه عکس‌ها
+            for (File file : files) {
+                sendPhoto(botToken, chatId, file);
+            }
+            
+            System.out.println("✅ " + files.length + " عکس به " + chatId + " ارسال شد.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * ارسال k عکس از یک پوشه به کاربر
      * @param botToken توکن ربات
      * @param chatId شناسه چت کاربر
